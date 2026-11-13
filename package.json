@@ -1,0 +1,12 @@
+{
+  "name": "octet",
+  "version": "1.0.0",
+  "description": "A complete computer in 256 bytes: assembler, CPU, screen and debugger in the browser.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8080"
+  },
+  "author": "Kirtan Bhatt",
+  "license": "MIT"
+}
