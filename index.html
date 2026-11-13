@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; base-uri 'none'; form-action 'none'">
+  <meta name="description" content="A complete computer in 256 bytes. Write assembly, watch every byte of memory change, draw on a 16 x 16 screen. Runs in your browser.">
+  <title>octet - a complete computer in 256 bytes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>octet</h1>
+    <p>A complete computer in 256 bytes. Write assembly, press Run, watch every byte.</p>
+  </header>
+
+  <main>
+    <section class="panel" aria-label="Program">
+      <div class="toolbar">
+        <label class="grow">Example
+          <select id="example"></select>
+        </label>
+        <label>Clock
+          <input id="speed" type="range" min="0" max="8" value="3">
+        </label>
+      </div>
+      <label class="sr" for="source">Assembly source</label>
+      <textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+      <div class="toolbar">
+        <button id="run" type="button" class="primary">Run</button>
+        <button id="step" type="button">Step</button>
+        <button id="reset" type="button">Assemble &amp; reset</button>
+      </div>
+      <p id="status" class="status" aria-live="polite"></p>
+      <ul id="errors" class="errors"></ul>
+    </section>
+
+    <section class="panel" aria-label="Machine">
+      <div class="top">
+        <div>
+          <h2>Screen</h2>
+          <div id="screen" class="screen" role="img" aria-label="16 by 16 pixel screen"></div>
+        </div>
+        <div class="grow">
+          <h2>Registers</h2>
+          <dl class="registers">
+            <div><dt>A</dt><dd id="reg-0">00</dd></div>
+            <div><dt>B</dt><dd id="reg-1">00</dd></div>
+            <div><dt>C</dt><dd id="reg-2">00</dd></div>
+            <div><dt>D</dt><dd id="reg-3">00</dd></div>
+            <div><dt>PC</dt><dd id="reg-pc">00</dd></div>
+            <div><dt>SP</dt><dd id="reg-sp">DF</dd></div>
+            <div><dt>Zero</dt><dd id="flag-z">0</dd></div>
+            <div><dt>Carry</dt><dd id="flag-c">0</dd></div>
+          </dl>
+          <h2>Next instruction</h2>
+          <p id="next" class="next">-</p>
+        </div>
+      </div>
+
+      <h2>Output</h2>
+      <pre id="output" class="output"></pre>
+
+      <h2>Memory <span class="legend"><i class="k-pc"></i>program counter <i class="k-sp"></i>stack pointer <i class="k-video"></i>screen</span></h2>
+      <div id="memory" class="memory"></div>
+    </section>
+  </main>
+
+  <section class="reference">
+    <h2>The whole instruction set</h2>
+    <table>
+      <tr><th>MOV dst, src</th><td>Copy a value. Either side can be a register, <code>[address]</code> or <code>[register]</code>; the source can also be a number.</td></tr>
+      <tr><th>ADD SUB AND OR XOR</th><td>Register with a register or number. Result goes to the first register and sets the flags.</td></tr>
+      <tr><th>CMP a, b</th><td>Compare without storing. Zero is set when equal, Carry when a is smaller than b.</td></tr>
+      <tr><th>INC DEC SHL SHR NOT</th><td>One register. Shifts move the lost bit into Carry.</td></tr>
+      <tr><th>JMP JZ JNZ JC JNC</th><td>Jump to a label: always, or when Zero / Carry is set / clear.</td></tr>
+      <tr><th>PUSH POP CALL RET</th><td>The stack starts at 0xDF and grows downward.</td></tr>
+      <tr><th>OUT OUTC</th><td>Print a value as a number, or as a character.</td></tr>
+      <tr><th>HLT NOP</th><td>Stop the machine; do nothing.</td></tr>
+      <tr><th>DB</th><td>Place raw bytes or a <code>"string"</code> in memory. Numbers: <code>42</code>, <code>0x2A</code>, <code>0b101010</code>, <code>'*'</code>.</td></tr>
+    </table>
+    <p>Registers A, B, C and D hold one byte each. Addresses 0xE0 to 0xFF are the screen: two bytes per row, one bit per pixel. A semicolon starts a comment.</p>
+    <p><a href="https://github.com/kirtanbhatt10/octet" rel="noopener">Source on GitHub</a> &middot; MIT licence</p>
+  </section>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
